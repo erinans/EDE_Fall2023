@@ -82,20 +82,24 @@ df_NickSchoolClassGrades
 11. Apply your function to the vector with test scores that you created in number 5.
 
 ```{r basics 3}
+testvector <- c(20, 30, 50, 60)
+ifelse(testvector>=50, 'True', 'False')
 
-ifelse(Grades<50, "False", "True")
+ifelse(Grades>=50, 'True', 'False')
 
 ```
 
 12. QUESTION: Which option of `if` and `else` vs. `ifelse` worked? Why?
 
-> Answer: The ifelse worked for me, I had trouble putting the Grades into the function, there would be an error in the "if" statement because the condition had a length > 1. This was the if else i created:
-#grade <- function(Grades) {
-#  if(Grades < 50) {
-#    "False"
-#  } 
-#  else {
-#    "True"
-#  }
-#}
-#if i entered grade(4), it would print back "False"), but if I submitted grade(Grades), I got the error 'Error in if (Grades < 50) { : the condition has length > 1'
+> Answer: The ifelse worked for me, I had trouble with 'if' and 'else' because it would throw up an error:
+x <- c(10, 40, 60, 80)
+questionthree <- function(x) {
+  if(x >= 50) {
+    "True"
+  } 
+  else {
+    "False"
+  }
+}
+questionthree(x)
+When I pressed run, Rstudio would print 'Error in if (x >= 50) { : the condition has length > 1'. It appears vectors are not allowed in an 'if' and 'else' statemnent, only 'ifelse' statements.
