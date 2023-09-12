@@ -31,14 +31,16 @@ This exercise accompanies the lessons in Environmental Data Analytics on coding 
 4.  Insert comments in your code to describe what you are doing.
 
 ```{r basics 1}
-#1. creating a sequence with from to by, also naming the sequence seq
-seq(1,30,3)
-seq <- seq(1,30,3)
+#1. creating a sequence with from to by
+firstseq <- seq(1,30,3) #naming sequence firstsequence
+firstseq
+
 #2. calculating mean and median of sequence
 mean(seq)
-median(seq)
+median(firstseq)
+
 #3. determining if median is greater than median
-mean(seq) > median (seq)
+mean(firstseq) > median (firstseq)
 ```
 
 ## Basics, Part 2
