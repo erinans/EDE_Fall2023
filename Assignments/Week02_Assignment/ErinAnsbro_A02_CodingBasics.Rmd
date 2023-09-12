@@ -60,26 +60,17 @@ Names
 Grades <- c(81,99,99,49) #integer
 Grades
 
-Pass <- c(Grades > 50) #logical
+Pass <- c(Grades >= 50) #logical
 Pass
 
-df_creation <- as.data.frame(Names) #creating data frame
+df_creation <- as.data.frame(Names) #creating data frame, changing vector to data frame, the binding columns
 df_creation
 df_NickSchoolClassGrades <- cbind(df_creation, Grades, Pass) #adding columns to data frame
 df_NickSchoolClassGrades
 
 #renaming columns to something informative
-names(df_NickSchoolClassGrades)
-Names_of_Students <- Names
-Names_of_Students
-
-Grades_of_Students <- Grades
-Grades_of_Students
-
-Did_Students_Pass <- Pass
-Did_Students_Pass
-
-df_NickSchoolClassGrades #how do i chnage column names in the dataframe?
+colnames(df_NickSchoolClassGrades) <- c('Names_of_Students', 'Grades_of_Students', 'Did_Student_Pass')
+df_NickSchoolClassGrades 
 ```
 
 9.  QUESTION: How is this data frame different from a matrix?
