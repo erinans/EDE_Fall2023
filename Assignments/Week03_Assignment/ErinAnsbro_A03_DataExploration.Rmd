@@ -96,14 +96,21 @@ class(Neonics$Conc.1..Author.)
 Neonics$Conc.1..Author.
 ```
 
-> Answer: The class is factor. It is not numeric becuase there are different levels of authoriship on research publications.
+> Answer: The class is factor. It is not numeric becuase there are different levels of authoriship on research publications. Factor is categorizing the authors because the numbers are not actually numbers, the are values like zip codes that we use to define something like authorship on a paper.
 
 ## Explore your data graphically (Neonics)
 
 9.  Using `geom_freqpoly`, generate a plot of the number of studies conducted by publication year.
 
 ```{r}
-geom_freqpoly()
+
+#need to find start and end date
+#change to date
+Neonics$Publication.Year <- as.Date(Neonics$Publication.Year)
+class(Neonics$Publication.Year)
+ggplot(Neonics) +
+  geom_freqpoly(aes(x=Publication.Year))+
+
 ```
 
 10. Reproduce the same graph but now add a color aesthetic so that different Test.Location are displayed as different colors.
@@ -131,7 +138,7 @@ Interpret this graph. What are the most common test locations, and do they diffe
 12. Determine the class of collectDate. Is it a date? If not, change to a date and confirm the new class of the variable. Using the `unique` function, determine which dates litter was sampled in August 2018.
 
 ```{r}
-
+class(Litter$collectDate) 
 ```
 
 13. Using the `unique` function, determine how many plots were sampled at Niwot Ridge. How is the information obtained from `unique` different from that obtained from `summary`?
@@ -144,20 +151,28 @@ Interpret this graph. What are the most common test locations, and do they diffe
 
 14. Create a bar graph of functionalGroup counts. This shows you what type of litter is collected at the Niwot Ridge sites. Notice that litter types are fairly equally distributed across the Niwot Ridge sites.
 
-```{r}
+```{r fig.height=3, fig.width=4}
+#install.packages("ggplot2")
+library(ggplot2)
+ggplot(Litter, aes(x=functionalGroup)) + 
+  geom_bar()
 
 ```
 
 15. Using `geom_boxplot` and `geom_violin`, create a boxplot and a violin plot of dryMass by functionalGroup.
 
 ```{r}
+ggplot(Litter) +
+  geom_boxplot(aes(x=dryMass, y=functionalGroup))
 
+ggplot(Litter)+
+  geom_violin(aes(x=dryMass, y=functionalGroup))
 ```
 
 Why is the boxplot a more effective visualization option than the violin plot in this case?
 
-> Answer:
+> Answer: Violin shows median, boxplots show interquartile range
 
 What type(s) of litter tend to have the highest biomass at these sites?
 
-> Answer:
+> Answer: Needles
