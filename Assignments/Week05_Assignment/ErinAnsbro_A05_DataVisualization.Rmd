@@ -1,0 +1,168 @@
+---
+title: "Assignment 5: Data Visualization"
+author: Erin Ansbro
+date: "Fall 2023"
+output: pdf_document
+geometry: margin=2.54cm
+fig_height: 3
+fig_width: 4
+editor_options: 
+  chunk_output_type: console
+---
+
+## OVERVIEW
+
+This exercise accompanies the lessons in Environmental Data Analytics on Data Visualization 
+
+## Directions
+1.  Rename this file `<FirstLast>_A05_DataVisualization.Rmd` (replacing `<FirstLast>` with your first and last name).
+2. Change "Student Name" on line 3 (above) with your name.
+3. Work through the steps, **creating code and output** that fulfill each instruction.
+4. Be sure your code is tidy; use line breaks to ensure your code fits in the knitted output.
+5. Be sure to **answer the questions** in this assignment document.
+6. When you have completed the assignment, **Knit** the text and code into a single PDF file.
+
+---
+
+## Set up your session 
+
+1. Set up your session. Load the tidyverse, lubridate, here & cowplot packages, and verify your home directory. Read in the NTL-LTER processed data files for nutrients and chemistry/physics for Peter and Paul Lakes (use the tidy `NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv` version in the Processed_KEY folder) and the processed data file for the Niwot Ridge litter dataset (use the `NEON_NIWO_Litter_mass_trap_Processed.csv` version, again from the Processed_KEY folder). 
+
+2. Make sure R is reading dates as date format; if not change the format to date.
+
+```{r initialize project}
+#1 #getting set up
+library(tidyverse)
+library(lubridate)
+library(here)
+library(ggplot2)
+#install.packages("cowplot")
+#install.packages("ggridges")
+library(cowplot)
+library(ggridges)
+getwd()
+
+#reading in the data
+LakeChemistry <- read.csv(  
+  "./Data/Processed_KEY/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv")
+
+Litter <- read.csv("./Data/Processed_KEY/NEON_NIWO_Litter_mass_trap_Processed.csv")
+
+#2 changing to dates
+class((LakeChemistry$sampledate))
+LakeChemistry$sampledate <- as.Date(LakeChemistry$sampledate, "%Y-%m-%d")
+class(LakeChemistry$sampledate)
+
+class(Litter$collectDate)
+Litter$collectDate <- as.Date(Litter$collectDate, "%Y-%m-%d")
+class(Litter$collectDate)
+```
+## Define your theme
+3. Build a theme and set it as your default theme. Customize the look of at least two of the following: 
+ * Plot background
+ * Plot title
+ * Axis labels
+ * Axis ticks/gridlines
+ * Legend
+
+```{r build plot theme}
+#3 Building my theme
+ErinTheme <- theme_light()+
+  theme(legend.position="top",plot.background = element_rect(fill = "light gray"),   
+        axis.title = element_text(face="bold"))
+
+theme_set(ErinTheme)
+```
+
+## Create graphs
+For numbers 4-7, create ggplot graphs and adjust aesthetics to follow best practices for data visualization. Ensure your theme, color palettes, axes, and additional aesthetics are edited accordingly.
+
+4. [NTL-LTER] Plot total phosphorus (`tp_ug`) by phosphate (`po4`), with separate aesthetics for Peter and Paul lakes. Add a line of best fit and color it black. Adjust your axes to hide extreme values (hint: change the limits using `xlim()` and/or `ylim()`).
+
+```{r plot total P vs PO4}
+#4  Building dot plot for comparing tp and po4
+PvsPo4 <- ggplot(LakeChemistry, aes(x=tp_ug, y=po4))+
+  geom_point(aes(shape=as.factor(lakename), color=lakename))+
+  ylim(0,50)+
+  geom_smooth(aes(x=tp_ug, y=po4),method = lm, se = FALSE, color="black")
+print(PvsPo4)
+
+```
+
+
+5. [NTL-LTER] Make three separate boxplots of (a) temperature, (b) TP, and (c) TN, with month as the x axis and lake as a color aesthetic. Then, create a cowplot that combines the three graphs. Make sure that only one legend is present and that graph axes are aligned. 
+
+Tip:
+* Recall the discussion on factors in the previous section as it may be helpful here. 
+* R has a built-in variable called `month.abb` that returns a list of months;see <https://r-lang.com/month-abb-in-r-with-example>
+
+```{r Create boxplots}
+#5 creating month column
+LakeChemistry <-  LakeChemistry %>%
+  mutate(Month=month(sampledate))
+
+class(LakeChemistry$Month)
+unique(LakeChemistry$Month)
+#changing month to factor, adding 12 levels, and labelling the 12 months
+LakeChemistry$Month <-factor(  
+  LakeChemistry$Month, levels = c(1,2,3,4,5,6,7,8,9,10,11,12),labels =c(  
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",  
+    "Oct", "Nov", "Dec") )
+class(LakeChemistry$Month)
+unique(LakeChemistry$Month)
+
+#creating three boxplots for temp, tn and tn
+BoxplotTemp <- ggplot(LakeChemistry, aes(x=Month, y=temperature_C))+
+  geom_boxplot(aes(color=lakename))+
+  scale_x_discrete(drop=FALSE)
+print(BoxplotTemp)
+
+BoxplotTP <- ggplot(LakeChemistry, aes(x=Month, y=tp_ug))+
+  geom_boxplot(aes(color=lakename))+
+    theme(legend.position="none")+
+  scale_x_discrete(drop=FALSE)
+print(BoxplotTP)
+
+BoxplotTN <- ggplot(LakeChemistry, aes(x=Month, y=tn_ug))+
+  geom_boxplot(aes(color=lakename))+
+    theme(legend.position="none")+
+  scale_x_discrete(drop=FALSE)
+print(BoxplotTN)
+
+#combining those three boxplots to be in the same visual
+Plotgrid <- plot_grid(BoxplotTemp, BoxplotTP, BoxplotTN, nrow=3, axis='t', align= "vh")
+print(Plotgrid)
+```
+
+Question: What do you observe about the variables of interest over seasons and between lakes? 
+
+> Answer: There's only data for warmer months. There is no data for tp_ug or tn_ug for the months of October and November.There are outliers for tp_ug and tn_ug for higher micrograms.
+
+6. [Niwot Ridge] Plot a subset of the litter dataset by displaying only the "Needles" functional group. Plot the dry mass of needle litter by date and separate by NLCD class with a color aesthetic. (no need to adjust the name of each land use)
+
+7. [Niwot Ridge] Now, plot the same plot but with NLCD classes separated into three facets rather than separated by color. 
+
+```{r Plot litter}
+#6 Filtering for needles
+LitterFilter <- filter(Litter, functionalGroup == "Needles")
+LitterPlot <- ggplot(LitterFilter) + #create plot for needle mass by date
+  geom_jitter(aes(x = collectDate, y = dryMass, color = nlcdClass))+ #color coding by class
+  scale_x_date(date_labels="%b %y",date_breaks  ="1 month")+
+  theme(axis.text.x=element_text(angle=45, hjust = 1))
+print(LitterPlot)
+
+#7
+unique(LitterFilter$nlcdClass)
+#creating three separate plots for the class instead of color coding
+Litterplot2 <- ggplot(LitterFilter)+
+  geom_jitter(aes(x=collectDate, y=dryMass))+
+  facet_wrap(vars(nlcdClass), nrow=3)+
+  scale_x_date(date_labels="%b %y",date_breaks  ="1 month")+
+  theme(axis.text.x=element_text(angle=45, hjust = 1))
+
+print(Litterplot2)
+
+```
+Question: Which of these plots (6 vs. 7) do you think is more effective, and why? 
+
+> Answer: I think it is easier to see the facet wrap plot, this is because the data is somewhat similar, and the colors are hard to distingush if they are all all on top of one another. If you break the plot into three separate ones, it's easier to see the points and thusly, the similarities and differences, for the different classes. For example, in July 2018, you can easily see that there was a lot less dryMass for evergeen forest in the facet_wrap. I do not pick up on that difference as easily when I look at the color plot.
