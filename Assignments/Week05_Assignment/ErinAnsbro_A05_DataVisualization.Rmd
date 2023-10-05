@@ -82,7 +82,8 @@ For numbers 4-7, create ggplot graphs and adjust aesthetics to follow best pract
 PvsPo4 <- ggplot(LakeChemistry, aes(x=tp_ug, y=po4))+
   geom_point(aes(shape=as.factor(lakename), color=lakename))+
   ylim(0,50)+
-  geom_smooth(aes(x=tp_ug, y=po4),method = lm, se = FALSE, color="black")
+  geom_smooth(aes(x=tp_ug, y=po4),method = lm, se = FALSE, color="black")+
+   theme(legend.title = element_text(size=8))
 print(PvsPo4)
 
 ```
@@ -112,13 +113,13 @@ unique(LakeChemistry$Month)
 #creating three boxplots for temp, tn and tn
 BoxplotTemp <- ggplot(LakeChemistry, aes(x=Month, y=temperature_C))+
   geom_boxplot(aes(color=lakename))+
-  theme(legend.title = element_text(size=8))+
+    theme(legend.position="none")+ 
   scale_x_discrete(drop=FALSE)
 print(BoxplotTemp)
 
 BoxplotTP <- ggplot(LakeChemistry, aes(x=Month, y=tp_ug))+
   geom_boxplot(aes(color=lakename))+
-    theme(legend.position="none")+
+ theme(legend.position = "left", legend.title = element_text(size=8))+
   scale_x_discrete(drop=FALSE)
 print(BoxplotTP)
 
@@ -129,7 +130,7 @@ BoxplotTN <- ggplot(LakeChemistry, aes(x=Month, y=tn_ug))+
 print(BoxplotTN)
 
 #combining those three boxplots to be in the same visual
-Plotgrid <- plot_grid(BoxplotTemp, BoxplotTP, BoxplotTN, nrow=3, axis='t', align= "vh")
+Plotgrid <- plot_grid(BoxplotTemp, BoxplotTP, BoxplotTN, nrow=3, axis='tblr', align= "vh")
 print(Plotgrid)
 ```
 
