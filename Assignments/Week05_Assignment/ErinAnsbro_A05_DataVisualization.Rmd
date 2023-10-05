@@ -37,9 +37,7 @@ library(lubridate)
 library(here)
 library(ggplot2)
 #install.packages("cowplot")
-#install.packages("ggridges")
 library(cowplot)
-library(ggridges)
 getwd()
 
 #reading in the data
@@ -114,6 +112,7 @@ unique(LakeChemistry$Month)
 #creating three boxplots for temp, tn and tn
 BoxplotTemp <- ggplot(LakeChemistry, aes(x=Month, y=temperature_C))+
   geom_boxplot(aes(color=lakename))+
+  theme(legend.title = element_text(size=8))+
   scale_x_discrete(drop=FALSE)
 print(BoxplotTemp)
 
