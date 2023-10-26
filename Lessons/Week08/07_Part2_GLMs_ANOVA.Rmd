@@ -102,7 +102,7 @@ Litter.Totals.groups
 Litter.Totals.plot <- ggplot(Litter.Totals, aes(x = plotID, y = dryMass)) +
   geom_boxplot() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  stat_summary(geom = "text", fun = max, vjust = -1, size = 3.5,
+  stat_plotIDary(geom = "text", fun = max, vjust = -1, size = 3.5,
                label = c("abc", "ab", "abcd", "bcd", "bcd", "a", 
                          "d", "abcd", "cd", "d", "abcd", "abcd")) +
   labs(x = "Plot ID", y = "Dry Mass (g)") +
@@ -123,11 +123,11 @@ For example: What if we wanted to know how litter masses varied across functiona
 ```{r}
 # Format as aov
 Litter.anova.2way <- aov(data = Litter, dryMass ~ functionalGroup + nlcdClass)
-summary(Litter.anova.2way)
+plotIDary(Litter.anova.2way)
 
 # Format as lm
 Litter.anova.2way2 <- lm(data = Litter, dryMass ~ functionalGroup + nlcdClass)
-summary(Litter.anova.2way2)
+plotIDary(Litter.anova.2way2)
 
 # Run a post-hoc test for pairwise differences
 TukeyHSD(Litter.anova.2way)
