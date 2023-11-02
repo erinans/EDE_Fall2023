@@ -240,15 +240,25 @@ print(Ozone_Plot)
 16. Run the Mann Kendall test on the non-seasonal Ozone monthly series. Compare the results with the ones obtained with the Seasonal Mann Kendall on the complete series.
 
 ```{r}
-#15 
-# Removing seasonality
-Ozone_NoSeasonal <-GaringerOzone.monthly.ts.decomp$time.series[,2:3]
+#15 Removing seasonality
+
+Components <- as.data.frame(GaringerOzone.monthly.ts.decomp$time.series[,1:3])
+
+#left in my original idea about how to subtract seasonality,   
+#then an updated try based on Luana's announcement. Leaving it in for future reference.
+
+#Ozone_NoSeasonal <-GaringerOzone.monthly.ts.decomp$time.series[,2:3]
+
+Ozone_NoSeasonal2 <-Components$trend+Components$remainder
 
 #16 Run MK test monthly
-Ozone_Monthly_MK <- Kendall::MannKendall(Ozone_NoSeasonal)
+#Ozone_Monthly_MK <- Kendall::MannKendall(Ozone_NoSeasonal)
+Ozone_Monthly_MK2 <- Kendall::MannKendall(Ozone_NoSeasonal2)
 
-Ozone_Monthly_MK
-summary(Ozone_Monthly_MK)
+#Ozone_Monthly_MK
+#summary(Ozone_Monthly_MK)
+Ozone_Monthly_MK2
+summary(Ozone_Monthly_MK2)
 ```
 
-> Answer: The results appear to be stronger in regards that ozone has decreased over time. The p-value is now at <2.22e-16 instead of about .04. This means the null hypothesis should be rejected. (Score =  -16300 , Var(Score) = 1545533 denominator =  28680 tau = -0.568, 2-sided pvalue =< 2.22e-16)
+> Answer: The results appear to be stronger in regards that ozone has decreased over time. The p-value is now at .0075 instead of about .04.
