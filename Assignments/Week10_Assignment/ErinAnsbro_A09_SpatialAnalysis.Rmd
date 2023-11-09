@@ -1,7 +1,9 @@
 ---
-title: "Assignment 9: Spatial Analysis in R"
-author: Erin Ansbro
-output: html_document
+title: 'Assignment 9: Spatial Analysis in R'
+author: "Erin Ansbro"
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ## OVERVIEW
@@ -53,11 +55,8 @@ In this exercise, we will be exploring stream gage height data in Nebraska corre
 
 ```{r Read the county data into an sf dataframe}
 #3. Read in Counties shapefile into an sf dataframe, filtering for just NE counties
-County <- st_read("./Data/Spatial/cb_2018_us_county_20m.shp")%>%
+County <- st_read("./Data/Spatial/cb_2018_us_county_20m.shp", stringsAsFactors=TRUE)%>%
   filter(STATEFP ==31)
-
-
-# colClasses = c('site_no'='factor'))
 
 class(County)
 names(County)
@@ -87,7 +86,7 @@ Next we'll read in some USGS/NWIS gage location data added to the `Data/Raw` fol
 
 ```{r Read in USGS Gage Locations}
 #7. Read in gage locations csv as a dataframe
-GageLocations <- read.csv("./Data/Raw/NWIS_SiteInfo_NE_RAW.csv", colClasses = c('site_no'='factor'))
+GageLocations <- read.csv("./Data/Raw/NWIS_SiteInfo_NE_RAW.csv", stringsAsFactors=TRUE,colClasses = c('site_no'='factor'))
 
 #8. Reveal the names of the columns
 colnames(GageLocations)
@@ -157,7 +156,7 @@ Lastly, we want to attach some gage height data to our site locations. I've cons
 
 ```{r Read in gage site data}
 #14. Read the site flow data into a data frame
-Height <- read.csv("./Data/Raw/NWIS_SiteFlowData_NE_RAW.csv", colClasses = c('site_no'='factor'))
+Height <- read.csv("./Data/Raw/NWIS_SiteFlowData_NE_RAW.csv", stringsAsFactors=TRUE, colClasses = c('site_no'='factor'))
 
 Height$date <- as.Date(Height$date, format= "%Y-%m-%d")
   
