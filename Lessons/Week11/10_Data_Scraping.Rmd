@@ -108,6 +108,7 @@ the_facility_name <- webpage %>%
   html_text()
 the_facility_name
 
+#tr:nth-child(2) th+ .left:nth-child(2)
 the_facility_type <- webpage %>% 
   html_nodes("tr:nth-child(2) .left~ .left+ td.left") %>% 
   html_text()
