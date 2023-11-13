@@ -117,7 +117,9 @@ dfplot<- ggplot(water_df, aes(x=Date, y=Maximum_Day_Use))+
   geom_smooth(method="loess", se=FALSE)+
   labs(title=paste("2022 Maximum Daily Use for",water_system_name),
        y="Maximum Use of Water (mgd)",
-       x="Date")
+       x="Date")+
+  scale_x_date(date_breaks="1 month",date_labels = "%B %Y")+
+  theme(axis.text.x=element_text(angle = 45, hjust = 1))
 
 print(dfplot)
 ```
@@ -191,7 +193,10 @@ final_df_plot <- ggplot(final_df, aes(x=Date, y=Maximum_Day_Usage))+
                           geom_smooth(method="loess", se=FALSE)+
                           labs(title="Maximum Daily Water Withdrawal in Durham in 2015",
                                y="Maximum Daily Withdrawal (mgd)",
-                               x="Date")
+                               x="Date")+
+  scale_x_date(date_breaks="1 month",date_labels = "%B %Y")+
+  theme(axis.text.x=element_text(angle = 45, hjust = 1))
+
 print(final_df_plot)
 
 
@@ -208,10 +213,11 @@ join_the_df <- bind_rows(final_df,Asheville_df)
 
 ggplot(join_the_df, aes(x=Date, y=Maximum_Day_Usage, color=Water_System_Name))+
            geom_line()+
-           geom_smooth(method="loess", se=FALSE)+
            labs(title="Maximum Daily Water Withdrawal in Durham and Asheville in 2015",
                       y="Maximum Daily Withdrawal (mgd)",
-                     x="Date")
+                     x="Date")+
+  scale_x_date(date_breaks="1 month",date_labels = "%B %Y")+
+  theme(axis.text.x=element_text(angle = 45, hjust = 1))
 
 ```
 
@@ -236,7 +242,10 @@ ggplot(Asheville_df_year, aes(x=Date, y=Maximum_Day_Usage))+
            geom_line()+
            geom_smooth(method="loess", se=FALSE)+
            labs(title="Maximum Daily Water Withdrawal in Asheville from 2010 to 2021",
-                      y="Maximum Daily Withdrawal (mgd)", x="Date")
+                      y="Maximum Daily Withdrawal (mgd)", x="Date")+
+    scale_x_date(date_breaks="1 year",date_labels = "%Y")+
+  theme(axis.text.x=element_text(angle = 45, hjust = 1))
+
 
 ```
 

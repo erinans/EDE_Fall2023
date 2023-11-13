@@ -92,13 +92,32 @@ gage_data <- gage_data %>%
 #Plot
 ggplot(gage_data,aes(x=datetime,y=discharge_cfs)) + 
   geom_line() +
-  labs(x = "Date",y = "Discharge (cfs)")
+  labs(x = "Date",y = "Discharge (cfs)")+
+  scale_x_date(date_breaks="1 day")
 ```
 
 ### Exercise: 
 > Alter the above code so that it plots the last *24* days of flow for gage *02085070*
 
 ```{r EXERCISE - pull.and.plot.other.discharge.data}
+#Set the URL
+theURL <- 'https://waterdata.usgs.gov/nwis/uv?search_site_no=02087500&period=7&format=rdb'
+
+#Get the data, which starts on line 30
+gage_data <- read.table(theURL,skip = 29,header=TRUE,sep='\t',stringsAsFactors = T) 
+
+#Update the column headers
+colnames(gage_data) = c("agency_cd", "site_no", "datetime", "tz_cd",
+                        "discharge_cfs", "89192_00060_cd", "gage_ht_ft", "89193_00065_cd")
+#Tidy the data
+gage_data <- gage_data %>% 
+  select(datetime, discharge_cfs,gage_ht_ft) %>% 
+  mutate(datetime = ymd_hm(datetime))
+
+#Plot
+ggplot(gage_data,aes(x=datetime,y=discharge_cfs)) + 
+  geom_line() +
+  labs(x = "Date",y = "Discharge (cfs)")
 
 ```
 
